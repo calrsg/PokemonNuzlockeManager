@@ -1,9 +1,10 @@
 import sys
 from PyQt6 import QtWidgets, QtCore, QtGui
-from DexParser import DexFileParser, DexURLParser
+from Dex import Dex, FileType, ImageFormat
+from Pokemon import Pokemon
 
-rrfile = DexFileParser('data/radicalred.json')
-rrurl = DexURLParser('https://play.radicalred.net/data/pokedex.json')
+dex = Dex("Radical Red 3.1", FileType.URL, 'https://play.radicalred.net/data/pokedex.json',
+          FileType.URL, 'https://play.radicalred.net/sprites/gen5/', ImageFormat.PNG)
 
-# print(rrfile.parse())
-# print(rrurl.parse())
+print(dex.getMon("DODUO-SEVII"))
+print(dex.getSprite(dex.getMon("DODUO-SEVII")))

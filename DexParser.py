@@ -1,29 +1,63 @@
 import json
 import requests
+from Pokemon import Pokemon
 
 
 class DexParser:
 
-    def parse(self):
+    def __init__(self, path):
+        self.json = None
+        self.path = path
+
+    def _parse(self):
         pass
+
+    def _jsonToPokemon(self):
+        pass
+
+    def getData(self):
+        """
+        Parses data from a json URL or file, and returns the data as a list of Pokemon objects.
+        :return:
+        """
+        self._parse()
+        return self._jsonToPokemon()
 
 
 class DexFileParser(DexParser):
-    def __init__(self, file):
-        self.file = file
 
-    def parse(self):
-        with open(self.file, 'r', encoding='utf-8') as f:
-            return json.load(f)
+    def _parse(self):
+        with open(self.path, 'r', encoding='utf-8') as f:
+            self.json = json.load(f)
+
+    def _jsonToPokemon(self):
+        """
+        Converts a json object to a Pokemon object
+        :return: A list of Pokemon objects.
+        """
+        res = []
+        for key, entry in self.json.items():
+            p = Pokemon(entry)
+            res.append(p)
+        return res
 
 
 class DexURLParser(DexParser):
-    def __init__(self, url):
-        self.url = url
 
-    def parse(self):
-        req = requests.get(self.url)
+    def _parse(self):
+        req = requests.get(self.path)
         if req.status_code == 200:
-            return req.text
+            self.json = req.json()
         else:
             return None
+
+    def _jsonToPokemon(self):
+        """
+        Converts a json object to a Pokemon object
+        :return: A list of Pokemon objects.
+        """
+        res = []
+        for key, entry in self.json.items():
+            p = Pokemon(entry)
+            res.append(p)
+        return res
